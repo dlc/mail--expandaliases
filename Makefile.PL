@@ -1,7 +1,7 @@
 package Mail::ExpandAliases;
 
 # ----------------------------------------------------------------------
-# $Id: Makefile.PL,v 1.1 2004/09/22 12:45:40 dlc Exp $
+# $Id: Makefile.PL,v 1.2 2004/09/22 13:08:56 dlc Exp $
 # ----------------------------------------------------------------------
 # Makefile.PL - Generate a Makefile
 # Copyright (C) 2002 darren chamberlain <darren@cpan.org>
@@ -38,7 +38,7 @@ my %macro     = (
 
 WriteMakefile(
     NAME      => __PACKAGE__,
-    VERSION   => 0.44,
+    VERSION   => 0.45,
     EXE_FILES => \@EXE_FILES,
     PREREQ_PM => \%PREREQ_PM,
     clean     => \%clean,
