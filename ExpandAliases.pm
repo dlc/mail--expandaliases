@@ -1,9 +1,9 @@
 package Mail::ExpandAliases;
 
 # -------------------------------------------------------------------
-# $Id: ExpandAliases.pm,v 1.1 2004/09/22 12:45:40 dlc Exp $
+# $Id: ExpandAliases.pm,v 1.2 2004/09/22 13:06:21 dlc Exp $
 # -------------------------------------------------------------------
-# Mail::ExpandAliases - Expand aliases from /etc/aliases files 
+# Mail::ExpandAliases - Expand aliases from /etc/aliases files
 # Copyright (C) 2002 darren chamberlain <darren@cpan.org>
 #
 # This program is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ package Mail::ExpandAliases;
 use strict;
 use vars qw($VERSION $DEBUG @POSSIBLE_ALIAS_FILES);
 
-$VERSION = 0.15;
+$VERSION = 0.45;
 $DEBUG = 0 unless defined $DEBUG;
 @POSSIBLE_ALIAS_FILES = qw(/etc/aliases
                            /etc/mail/aliases
@@ -65,7 +65,7 @@ use constant FILE    => 2;  # "Main" aliases file
 
 # ----------------------------------------------------------------------
 # import(@files)
-# 
+#
 # Allow for compile-time additions to @POSSIBLE_ALIAS_FILES
 # ----------------------------------------------------------------------
 sub import {
@@ -168,7 +168,7 @@ sub init {
 
         $orig = $line;
         if ($line =~ s/^([^:]+)\s*:\s*//) {
-            $alias = lc $1;       
+            $alias = lc $1;
             $self->debug("$. => '$alias'");
         }
         else {
@@ -233,7 +233,7 @@ sub expand {
             }
             else {
                 for ($self->expand($n, $original || $name)) {
-                    $answers{ $_ }++ 
+                    $answers{ $_ }++
                 }
             }
         }
@@ -262,6 +262,22 @@ sub reload {
     $self->parse;
 
     return $self;
+}
+
+# ----------------------------------------------------------------------
+# aliases()
+#
+# Lists the aliases.
+# In list context, returns an array;
+# in scalar context, returns a reference to an array.
+#
+# From a patch submitted by Thomas Kishel <tom@kishel.net>
+# ----------------------------------------------------------------------
+sub aliases {
+    my ($self, @answers);
+    $self = shift;
+    @answers = sort keys %{ $self->[ PARSED ] };
+    return wantarray ? @answers : \@answers;
 }
 
 package File::Aliases;
@@ -423,7 +439,7 @@ and requests should be reported via the appropriate queue at
 
 =head1 VERSION
 
-$Id: ExpandAliases.pm,v 1.1 2004/09/22 12:45:40 dlc Exp $
+$Id: ExpandAliases.pm,v 1.2 2004/09/22 13:06:21 dlc Exp $
 
 =head1 AUTHOR
 
