@@ -1,7 +1,7 @@
 package Mail::ExpandAliases;
 
 # -------------------------------------------------------------------
-# $Id: ExpandAliases.pm,v 1.2 2004/09/22 13:06:21 dlc Exp $
+# $Id: ExpandAliases.pm,v 1.3 2007/06/22 02:08:46 dlc Exp $
 # -------------------------------------------------------------------
 # Mail::ExpandAliases - Expand aliases from /etc/aliases files
 # Copyright (C) 2002 darren chamberlain <darren@cpan.org>
@@ -177,7 +177,10 @@ sub init {
             next;
         }
 
-        @expandos = split /,\s*/, $line;
+        @expandos =
+            #grep !/^$alias$/,
+            map { s/^\s*//; s/\s*$//; $_ }
+            split /,/, $line;
 
         $self->debug($alias, map "\t$_", @expandos);
         $self->[ PARSED ]->{ $alias } = \@expandos;
@@ -206,21 +209,27 @@ sub expand {
         if (defined $self->[ CACHED ]->{ $lcname });
 
     if (@names = @{ $self->[ PARSED ]->{ $lcname } || [ ] }) {
+        my $c = $self->[ CACHED ]->{ $lcname } = [ ];
+
         for $n (@names) {
             $n =~ s/^[\s'"]*//g;
             $n =~ s/['"\s]*$//g;
             my $type = substr $n, 0, 1;
+
             if ($type eq '|' or $type eq '/') {
                 # |/path/to/program
                 # /path/to/mbox
                 $answers{ $n }++;
+                push @$c, $n;
             }
+
             elsif ($type eq ':') {
                 # :include:
                 #$n =~ s/:include:\s*//ig;
                 #$self->parse($n);
                 warn "Skipping include file $n\n";
             }
+
             elsif ($type eq '\\') {
                 # \foo
                 # literal, non-escaped value, useful for
@@ -230,7 +239,9 @@ sub expand {
                 # go to bar.
                 $n =~ s/^\\//;
                 $answers{ $n }++;
+                push @$c, $n;
             }
+
             else {
                 for ($self->expand($n, $original || $name)) {
                     $answers{ $_ }++
@@ -439,7 +450,7 @@ and requests should be reported via the appropriate queue at
 
 =head1 VERSION
 
-$Id: ExpandAliases.pm,v 1.2 2004/09/22 13:06:21 dlc Exp $
+$Id: ExpandAliases.pm,v 1.3 2007/06/22 02:08:46 dlc Exp $
 
 =head1 AUTHOR
 

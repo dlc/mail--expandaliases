@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # ----------------------------------------------------------------------
-# $Id: expand-alias,v 1.1 2004/09/22 12:45:40 dlc Exp $
+# $Id: expand-alias,v 1.2 2007/06/22 02:08:46 dlc Exp $
 # ----------------------------------------------------------------------
 # expand-alias - expand an alias from /etc/aliases
 # Copyright (C) 2002 darren chamberlain <darren@cpan.org>
@@ -23,13 +23,13 @@
 
 use strict;
 use vars qw($VERSION $opt_h $opt_f $opt_t $opt_v
-                     $opt_n $opt_c $opt_s
+                     $opt_n $opt_c $opt_s $opt_D
                      $joint);
 
 use Getopt::Std;
 use Mail::ExpandAliases;
 
-getopts("tcnhf:sv");
+getopts("Dtcnhf:sv");
 
 if ($opt_h) {
     exec("perldoc $0");
@@ -42,6 +42,7 @@ if (($opt_t + $opt_c + $opt_n + $opt_s) > 1) {
 
 $joint = $opt_t ? "\t" : $opt_c ? ", " : $opt_n ? "\n" : " ";
 
+$Mail::ExpandAliases::DEBUG =1 if $opt_D;
 my $expander = Mail::ExpandAliases->new($opt_f);
 
 for (@ARGV) {
