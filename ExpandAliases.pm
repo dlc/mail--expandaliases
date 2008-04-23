@@ -1,8 +1,6 @@
 package Mail::ExpandAliases;
 
 # -------------------------------------------------------------------
-# $Id: ExpandAliases.pm,v 1.3 2007/06/22 02:08:46 dlc Exp $
-# -------------------------------------------------------------------
 # Mail::ExpandAliases - Expand aliases from /etc/aliases files
 # Copyright (C) 2002 darren chamberlain <darren@cpan.org>
 #
@@ -447,10 +445,6 @@ and the invoking user should not need this module to read their own
 Any other shortcomings, bugs, errors, or generally related complaints
 and requests should be reported via the appropriate queue at
 <http://rt.cpan.org/>.
-
-=head1 VERSION
-
-$Id: ExpandAliases.pm,v 1.3 2007/06/22 02:08:46 dlc Exp $
 
 =head1 AUTHOR
 

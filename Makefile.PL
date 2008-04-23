@@ -1,8 +1,6 @@
 package Mail::ExpandAliases;
 
 # ----------------------------------------------------------------------
-# $Id: Makefile.PL,v 1.2 2004/09/22 13:08:56 dlc Exp $
-# ----------------------------------------------------------------------
 # Makefile.PL - Generate a Makefile
 # Copyright (C) 2002 darren chamberlain <darren@cpan.org>
 #

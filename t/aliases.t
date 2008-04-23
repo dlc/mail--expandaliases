@@ -1,7 +1,6 @@
 #!/usr/bin/perl -w
 # ----------------------------------------------------------------------
 # vim: set ft=perl:
-# $Id: aliases.t,v 1.1 2004/09/22 12:45:40 dlc Exp $
 # ----------------------------------------------------------------------
 # All email addresses in this file go to unresolvable.perl.org, which
 # I think I made up.  My apologies to Tom, Barnaby, Bridget, and Quincy

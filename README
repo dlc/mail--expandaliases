@@ -99,9 +99,6 @@ BUGS / SHORTCOMINGS
     and requests should be reported via the appropriate queue at
     <http://rt.cpan.org/>.
 
-VERSION
-    $Id: README,v 1.1 2004/09/22 12:45:40 dlc Exp $
-
 AUTHOR
     darren chamberlain <darren@cpan.org>
 
