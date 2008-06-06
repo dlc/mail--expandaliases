@@ -9,3 +9,4 @@ t/aliases
 t/aliases.t
 t/expand-alias.t
 t/incfile
+t/self-referential-aliases
