@@ -50,7 +50,7 @@ package Mail::ExpandAliases;
 use strict;
 use vars qw($VERSION $DEBUG @POSSIBLE_ALIAS_FILES);
 
-$VERSION = 0.45;
+$VERSION = 0.48;
 $DEBUG = 0 unless defined $DEBUG;
 @POSSIBLE_ALIAS_FILES = qw(/etc/aliases
                            /etc/mail/aliases
@@ -68,7 +68,15 @@ use constant FILE    => 2;  # "Main" aliases file
 # ----------------------------------------------------------------------
 sub import {
     my $class = shift;
-    unshift @POSSIBLE_ALIAS_FILES, $_ for @_;
+
+    for my $x (@_) {
+        if ($x =~ /^debug$/i) {
+            $DEBUG = 1;
+        }
+        elsif (-f "$x") {
+            unshift @POSSIBLE_ALIAS_FILES, $x;
+        }
+    }
 }
 
 sub new {
@@ -289,6 +297,40 @@ sub aliases {
     return wantarray ? @answers : \@answers;
 }
 
+# ----------------------------------------------------------------------
+# exists($alias)
+#
+# Determine if an alias exists not not
+# ----------------------------------------------------------------------
+sub exists {
+    my ($self, $alias) = @_;
+    return length($self->check($alias)) > 0;
+}
+
+# ----------------------------------------------------------------------
+# check($alias)
+#
+# Returns the unexpanded form an an alias.  I.e., exactly what is in the
+# file, without expansion.
+#
+# Unlike expand, if $alias does not exist in the file, check() returns
+# the empty array.  Otherwise, $alias returns an array (in list context)
+# or a reference to an array (in scalar context) to the items in the
+# aliases file.
+#
+# You can emulate expand() by calling check recusrively.
+# ----------------------------------------------------------------------
+sub check {
+    my $self = shift;
+    my $ret;
+
+    if (my $name = shift) {
+        $ret = $self->[ PARSED ]->{ $name }
+    }
+
+    return wantarray ? @$ret : [ @$ret ];
+}
+
 package File::Aliases;
 use constant FH     => 0;
 use constant BUFFER => 1;
@@ -382,7 +424,8 @@ These expanded addresses are also expanded, whenever possible.
 A non-expandible alias (no entry in the aliases file) expands to
 itself, i.e., does not expand.
 
-In scalar context, C<expand> returns a reference to a list.
+In scalar context, C<expand> returns a reference to a list.  Note 
+that this list may have 1 item in it.
 
 Note that Mail::ExpandAliases provides read-only access to the alias
 file.  If you are looking for read access, see Mail::Alias, which is a
@@ -393,6 +436,21 @@ C<sendmail> does, including loop detection and support for escaped
 named.  See chapter 24, "Aliases", in I<Sendmail>
 (E<lt>http://www.oreilly.com/catalog/sendmail/E<gt>) for full details
 about this process.
+
+As of version 0.48, support exists for non-recursive alias expansions,
+i.e., returning what's listed in the alias file.  This is done with the
+C<check> method:
+
+  @aliases = $ma->check($alias);
+
+In list context, C<check> returns a list of matches, and in scalar
+context, C<check> returns a reference to a list.
+
+There is also an C<exists> method, which will indicate if a particular
+alias is defined in the file:
+
+  if ($ma->exists($alias)) {
+      ....
 
 =head1 ALIAS FILE LOCATIONS
 
