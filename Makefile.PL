@@ -35,7 +35,7 @@ my %macro     = (
 
 WriteMakefile(
     NAME      => __PACKAGE__,
-    VERSION   => 0.48,
+    VERSION   => 0.49,
     EXE_FILES => \@EXE_FILES,
     PREREQ_PM => \%PREREQ_PM,
     clean     => \%clean,

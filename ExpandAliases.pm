@@ -50,7 +50,7 @@ package Mail::ExpandAliases;
 use strict;
 use vars qw($VERSION $DEBUG @POSSIBLE_ALIAS_FILES);
 
-$VERSION = 0.48;
+$VERSION = 0.49;
 $DEBUG = 0 unless defined $DEBUG;
 @POSSIBLE_ALIAS_FILES = qw(/etc/aliases
                            /etc/mail/aliases
@@ -304,7 +304,7 @@ sub aliases {
 # ----------------------------------------------------------------------
 sub exists {
     my ($self, $alias) = @_;
-    return length($self->check($alias)) > 0;
+    return CORE::exists($self->[ PARSED ]->{ $alias });
 }
 
 # ----------------------------------------------------------------------
@@ -327,6 +327,8 @@ sub check {
     if (my $name = shift) {
         $ret = $self->[ PARSED ]->{ $name }
     }
+
+    $ret ||= [];
 
     return wantarray ? @$ret : [ @$ret ];
 }
