@@ -31,32 +31,15 @@ my %clean     = ('FILES' => "$dist $dist.asc distdir");
 my %macro     = (
     'GPG' => 'gpg',
     'AUTHOR' => 'darren@cpan.org',
-    'SIGN'  => '--detach-sign --armor',
 );
 
 WriteMakefile(
     NAME      => __PACKAGE__,
-    VERSION   => 0.45,
+    VERSION   => 0.48,
     EXE_FILES => \@EXE_FILES,
     PREREQ_PM => \%PREREQ_PM,
     clean     => \%clean,
     macro     => \%macro,
 );
-
-package MY;
-sub dist_dir {
-	my $self = shift;
-	my $stuff = $self->SUPER::dist_dir(@_);
-
-	return "$stuff\ttouch distdir\n\n";
-}
-
-sub postamble {
-    return <<'P';
-distsign :: $(DISTVNAME).tar$(SUFFIX)
-	$(GPG) $(SIGN) -u $(AUTHOR) $(DISTVNAME).tar$(SUFFIX)
-	@cat $(DISTVNAME).tar$(SUFFIX).asc
-P
-}
 
 __END__
