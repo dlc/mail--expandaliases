@@ -8,5 +8,6 @@ README
 t/aliases
 t/aliases.t
 t/expand-alias.t
+t/exists.t
 t/incfile
 t/self-referential-aliases
